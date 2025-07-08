@@ -79,7 +79,13 @@ cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Mongodb Install"
 
-
+STATUS=$(mongosh --host 172.31.18.21 --eval 'db.getmongo().getDBNames().indexof("catalogue")')
+if [ $STATUS -ne 0 ]
+then
 mongosh --host 172.31.18.219 </app/db/master-data.js &>>$LOG_FILE
 VALIDATE $? "Loading data into MOngodb"
+else
+echo -e "Data is already Loaded ... $Y SKIPPING $N"
+fi
+
 
