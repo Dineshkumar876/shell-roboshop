@@ -41,8 +41,14 @@ VALIDATE $? "Enable Nodejs:20"
 dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "$G Install Nodejs $N"
 
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
-VALIDATE $? "System Create User in roboshop"
+id roboshop
+if [ $? -ne 0 ]
+then
+   useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
+   VALIDATE $? "System Create User in roboshop"
+else
+   echo -e "System user roboshop already created ... $Y SKIPPING $N"
+   fi
 
 mkdir /app 
 VALIDATE $? "Create make directory"
@@ -74,3 +80,5 @@ VALIDATE $? "Mongodb Install"
 
 
 mongosh --host 172.31.18.219 </app/db/master-data.js &>>$LOG_FILE
+VALIDATE $? "Loading data into MOngodb"
+
