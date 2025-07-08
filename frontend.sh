@@ -60,7 +60,7 @@ VALIDATE $? "Unzipping frontend"
 rm -rf /etc/nginx/nginx.conf 
 VALIDATE $? "Remove default nginx conf"
 
-cp $SCRIPT_DIR nginx.conf /etc/nginx/nginx.conf
+cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
 VALIDATE $? "Copying Nginx.conf"
 
 systemctl restart nginx 
