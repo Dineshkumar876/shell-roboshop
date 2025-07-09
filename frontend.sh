@@ -65,3 +65,4 @@ VALIDATE $? "Copying Nginx.conf"
 
 systemctl restart nginx 
 VALIDATE $? "Restart Nginx"
+
