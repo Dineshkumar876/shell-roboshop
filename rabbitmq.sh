@@ -31,3 +31,7 @@ VALIDATE(){
         exit 1
     fi
 }
+
+cp $SCRIPT_DIR/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
+VALIDATE $? "Copy rabbitmq repo"
+
