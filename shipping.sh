@@ -21,6 +21,9 @@ else
     echo "You are running with root access" | tee -a $LOG_FILE
 fi
 
+echo "Please enter root password to setup"
+read -s MYSQL_ROOT_PASSWORD
+
 # validate functions takes input as exit status, what command they tried to install
 VALIDATE(){
     if [ $1 -eq 0 ]
@@ -75,9 +78,9 @@ VALIDATE $? "Start Shipping"
 dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Install Mysql"
 
-mysql -h 172.31.26.124 -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_FILE
-mysql -h 172.31.26.124 -uroot -pRoboShop@1 < /app/db/app-user.sql &>>$LOG_FILE 
-mysql -h 172.31.26.124 -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
+mysql -h 172.31.26.124 -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
+mysql -h 172.31.26.124 -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/app-user.sql &>>$LOG_FILE 
+mysql -h 172.31.26.124 -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
 VALIDATE $? "Loading Data in Mysql"
 
 systemctl restart shipping &>>$LOG_FILE
