@@ -1,4 +1,4 @@
-#!/bin/bash
+ #!/bin/bash
 
 USERID=$(id -u)
 R="\e[31m"
@@ -13,7 +13,6 @@ SCRIPT_DIR=$PWD
 mkdir -p $LOGS_FOLDER
 echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 
-# check the user has root priveleges or not
 if [ $USERID -ne 0 ]
 then
     echo -e "$R ERROR:: Please run this script with root access $N" | tee -a $LOG_FILE
@@ -34,13 +33,13 @@ VALIDATE(){
 }
 
 dnf module disable nginx -y &>>$LOG_FILE
-VALIDATE $? "Disable Nginx"
+VALIDATE $? "Diable Nginx"
 
 dnf module enable nginx:1.24 -y &>>$LOG_FILE
 VALIDATE $? "Enable Nginx:1.24"
 
 dnf install nginx -y &>>$LOG_FILE
-VALIDATE $? "Installing Nginx"
+VALIDATE $? "Install Nginx"
 
 systemctl enable nginx &>>$LOG_FILE
 VALIDATE $? "Enable Nginx"
@@ -48,23 +47,18 @@ VALIDATE $? "Enable Nginx"
 systemctl start nginx &>>$LOG_FILE
 VALIDATE $? "Start Nginx"
 
-rm -rf /usr/share/nginx/html/* &>>$LOG_FILE
-VALIDATE $? "Removing Default Content"
-
+rm -rf /usr/share/nginx/html/* 
 curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$LOG_FILE
-VALIDATE $? "Downloading Client Server"
+VALIDATE $? "Downloading Curl"
 
 cd /usr/share/nginx/html 
 unzip /tmp/frontend.zip &>>$LOG_FILE
-VALIDATE $? "Unzipping frontend"
-
-rm -rf /etc/nginx/nginx.conf 
-VALIDATE $? "Remove default nginx conf"
+VALIDATE $? "Unziping Server"
 
 cp $SCRIPT_DIR/nginx.conf /etc/nginx/nginx.conf
-VALIDATE $? "Copying Nginx.conf"
+VALIDATE $? "Copying to Remote Server"
 
 systemctl restart nginx 
-VALIDATE $? "Restart Nginx"
+VALIDATE $? "REstart Nginx"
 
 
